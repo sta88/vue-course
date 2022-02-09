@@ -31,13 +31,24 @@
 
         <div class="mb-3">
           <label for="phone" class="form-label">Phone</label>
-          <input
-            v-model="phone"
-            type="phone"
-            name="phoneNumber"
-            class="form-control" 
-            id="phone" >
-          <div id="phoneHelp" class="form-text">Enter your phone.</div>
+          <div class="row">
+            <div class="col-3">
+              <select class="form-select" aria-label="Default select example">
+                <option value="+7">+7</option>
+                <option value="+375">+375</option>
+              </select>
+            </div>
+            <div class="col-9">
+              <input
+                v-model="phone"
+                type="phone"
+                name="phoneNumber"
+                class="form-control" 
+                id="phone" 
+                v-maska="'###-###-##-##'">
+              <div id="phoneHelp" class="form-text">Enter your phone. {{phone.length}}</div>
+            </div>
+          </div>
         </div>
 
         <div v-if="phone" class="mb-3">
@@ -73,14 +84,14 @@ export default {
   methods: {
     onSubmit(e) {
       if (this.name && this.phone) {
-        let infoData = {
-          name: this.name,
-          phone: this.phone
-        };
+        // let infoData = {
+        //   name: this.name,
+        //   phone: this.phone
+        // };
         
         this.name = null;
         this.phone = null;
-console.log(infoData);
+// console.log(infoData);
         e.preventDefault();
 
         let answerJson = e.target.getAttribute('action');
