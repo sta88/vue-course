@@ -33,9 +33,16 @@
           <label for="phone" class="form-label">Phone</label>
           <div class="row">
             <div class="col-3">
-              <select class="form-select" aria-label="Default select example">
-                <option value="+7">+7</option>
-                <option value="+375">+375</option>
+              <select 
+                v-model="code"
+                class="form-select" 
+                aria-label="Default select example">
+                <option 
+                  v-for="c in codes" 
+                  v-bind:value="c.id"
+                  :key = "c.id">
+                  {{ c.value }}
+                </option>
               </select>
             </div>
             <div class="col-9">
@@ -45,19 +52,19 @@
                 name="phoneNumber"
                 class="form-control" 
                 id="phone" 
-                v-maska="'###-###-##-##'">
-              <div id="phoneHelp" class="form-text">Enter your phone. {{phone.length}}</div>
+                v-maska="phoneMask()">
+              <div id="phoneHelp" class="form-text">Enter your phone: {{masks[code]}}</div>
             </div>
           </div>
         </div>
 
-        <div v-if="phone" class="mb-3">
-          <label for="code" class="form-label">Код</label>
+        <div v-if="phone.length === masks[code].length" class="mb-3">
+          <label for="pin" class="form-label">Код</label>
           <input
-            id="code"
-            v-model="code"
+            id="pin"
+            v-model="pin"
             type="text"
-            name="code"
+            name="pin"
             class="form-control" 
           >
         </div>
@@ -75,23 +82,27 @@ export default {
   data() {
     return {
       errors: [],
-      name: null,
-      phone: null,
-      code: null
+      name: '',
+      phone: '',
+      code: 'ru',
+      codes: [
+        {id: 'ru', value: '+7'},
+        {id: 'by', value: '+375'}
+      ],
+      masks: {
+        'ru' : '###-###-##-##',
+        'by' : '###-###-###'
+      },
+      pin: ''
     };
   },
 
   methods: {
     onSubmit(e) {
-      if (this.name && this.phone) {
-        // let infoData = {
-        //   name: this.name,
-        //   phone: this.phone
-        // };
-        
+      if (this.name && this.phone) {        
         this.name = null;
         this.phone = null;
-// console.log(infoData);
+        
         e.preventDefault();
 
         let answerJson = e.target.getAttribute('action');
@@ -117,6 +128,14 @@ export default {
       }
 
     },
+    
+    phoneMask() {
+      console.log(this.masks[this.code].length);
+      return this.masks[this.code];
+    }
+  },
+  
+  computed: {
   }
 };
 </script>
