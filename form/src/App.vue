@@ -48,6 +48,7 @@
             <div class="col-9">
               <input
                 v-model="phone"
+                v-on:input="checkPhone"
                 type="phone"
                 name="phoneNumber"
                 class="form-control" 
@@ -58,7 +59,7 @@
           </div>
         </div>
 
-        <div v-if="phone.length === masks[code].length" class="mb-3">
+        <div v-if="phoneChecked" class="mb-3">
           <label for="pin" class="form-label">Код</label>
           <input
             id="pin"
@@ -93,7 +94,9 @@ export default {
         'ru' : '###-###-##-##',
         'by' : '###-###-###'
       },
-      pin: ''
+      pin: '',
+      phoneChecked: false,
+      flag: true,
     };
   },
 
@@ -130,8 +133,31 @@ export default {
     },
     
     phoneMask() {
-      console.log(this.masks[this.code].length);
       return this.masks[this.code];
+    },
+    
+    checkPhone() {
+      if (this.phone.length === this.masks[this.code].length) {
+      console.log(this.flag);
+        if (this.flag) {
+          this.axios.get('/form.json')
+            .then((response) => {
+              if (response.data.success) {
+                this.phoneChecked = true;
+              } else {
+                this.errors.push('Ошибка передачи данных.');
+              }
+            })
+            .catch((error) => {
+              this.phoneChecked = false;
+              console.log(error);
+            });
+          this.flag = false;
+        }
+      console.log('22', this.flag);
+      } else {
+        this.flag = true;
+      }
     }
   },
   
