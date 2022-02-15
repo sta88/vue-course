@@ -1,36 +1,32 @@
 <template>
   <div class="container">
-    <component :is="currComponent"></component>
+    <Register />
+    <Catalog />
+    <!-- <component :is="currComp"></component> -->
   </div>
 </template>
 
 <script>
-  import Register from '@/components/Register'
-  import Catalog from '@/components/Catalog'
-  export default {
-    name: "App",
+import Register from "@/components/Register";
+import Catalog from "@/components/Catalog";
+export default {
+  name: "App",
 
-    components: {
-      Register,
-      Catalog
-    },
+  components: {
+    Register,
+    Catalog,
+  },
 
-    props: 
-        ['currComp']
-    ,
+  props: ["currComp"],
+  data() {
+    return {
+    };
+  },
 
-    data() {
-      return {
-      };
-    },
+  methods: {},
 
-    methods: {
-    },
-    
-    computed: {
-    }
-  };
+  computed: {},
+};
 </script>
 
-<style>
-</style>
+<style></style>
