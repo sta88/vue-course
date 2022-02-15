@@ -93,7 +93,6 @@ export default {
             phoneChecked: false,
             flag: true,
             pincode: "",
-            currComp: "Catalog",
         };
     },
 
@@ -123,8 +122,7 @@ export default {
                     .get(answerJson)
                     .then((response) => {
                         if (response.data.success) {
-                            // let compon = this.currComp;
-                            // this.$emit('submit', compon);
+                            this.$emit('submitted', 'Catalog');
                         } else {
                             this.errors.push("Ошибка передачи данных.");
                         }

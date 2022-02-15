@@ -1,8 +1,6 @@
 <template>
   <div class="container">
-    <Register />
-    <Catalog />
-    <!-- <component :is="currComp"></component> -->
+    <component :is="currComp" v-on:submitted="afterForm"></component>
   </div>
 </template>
 
@@ -17,13 +15,17 @@ export default {
     Catalog,
   },
 
-  props: ["currComp"],
   data() {
     return {
+      currComp: 'Register',
     };
   },
 
-  methods: {},
+  methods: {
+    afterForm(str) {
+      this.currComp = str;
+    }
+  },
 
   computed: {},
 };
