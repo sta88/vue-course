@@ -1,9 +1,10 @@
 <template>
-    <h1>Form</h1>
+    <h1>Register</h1>
+    <br>
     <div class="col-md-4">
         <form @submit="onSubmit" action="/form.json" method="get">
             <div v-if="errors.length" class="text-danger">
-                <b>Пожалуйста исправьте указанные ошибки:</b>
+                <b>Please correct:</b>
                 <ul>
                     <li v-for="(error, idx) in errors" v-bind:key="idx">
                         {{ error }}
@@ -12,13 +13,14 @@
             </div>
 
             <div class="mb-3">
-                <label for="name" class="form-label">Имя</label>
+                <label for="name" class="form-label">Name</label>
                 <input
                     id="name"
-                    v-model="name"
                     type="text"
                     name="name"
                     class="form-control"
+                    v-bind:value="userName"
+                    @input="$emit('update:userName', $event.target.value)"
                 />
             </div>
 
@@ -49,6 +51,7 @@
                             class="form-control"
                             id="phone"
                             v-maska="phoneMask()"
+                            autocomplete="off"
                         />
                         <div id="phoneHelp" class="form-text">
                             Enter your phone: {{ masks[code] }}
@@ -58,13 +61,14 @@
             </div>
 
             <div v-if="phoneChecked" class="mb-3">
-                <label for="pin" class="form-label">Код</label>
+                <label for="pin" class="form-label">Pin (for test 123456)</label>
                 <input
                     id="pin"
                     v-model="pin"
                     type="text"
                     name="pin"
                     class="form-control"
+                    autocomplete="off"
                 />
             </div>
 
@@ -75,6 +79,14 @@
 
 <script>
 export default {
+    props: {
+	    userName: String
+	},
+
+    emits: [
+        'update:userName', 
+    ],
+
     data() {
         return {
             errors: [],
@@ -99,19 +111,19 @@ export default {
     methods: {
         onSubmit(e) {
             this.errors = [];
-            if (!this.name) {
-                this.errors.push("Требуется указать имя.");
+            if (!this.userName) {
+                this.errors.push("Enter your name.");
             }
             if (!this.phone) {
-                this.errors.push("Требуется указать телефон.");
+                this.errors.push("Enter your phone.");
             }
 
             if (this.pin) {
                 if (this.pin !== this.pincode) {
-                    this.errors.push("Неверный код.");
+                    this.errors.push("Wrong pin.");
                 }
             } else {
-                this.errors.push("Введите код.");
+                this.errors.push("Enter pin.");
             }
 
             if (this.errors.length == 0) {
@@ -122,9 +134,9 @@ export default {
                     .get(answerJson)
                     .then((response) => {
                         if (response.data.success) {
-                            this.$emit('submitted', 'Catalog');
+                            this.$emit('submitted', 'Cabinet');
                         } else {
-                            this.errors.push("Ошибка передачи данных.");
+                            this.errors.push("Error submit.");
                         }
                     })
                     .catch((error) => {
@@ -155,7 +167,7 @@ export default {
                                 this.phoneChecked = true;
                                 this.pincode = response.data.pincode;
                             } else {
-                                this.errors.push("Ошибка передачи данных.");
+                                this.errors.push("Error submit.");
                             }
                         })
                         .catch((error) => {

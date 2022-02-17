@@ -1,23 +1,29 @@
 <template>
   <div class="container">
-    <component :is="currComp" v-on:submitted="afterForm"></component>
+    <Header />
+
+    <component :is="currComp" v-on:submitted="afterForm" v-model:user-name="userName"></component>
   </div>
 </template>
 
 <script>
+import Header from "@/components/Header";
 import Register from "@/components/Register";
-import Catalog from "@/components/Catalog";
+import Cabinet from "@/components/Cabinet";
+
 export default {
   name: "App",
 
   components: {
+    Header,
     Register,
-    Catalog,
+    Cabinet,
   },
 
   data() {
     return {
       currComp: 'Register',
+      userName: '',
     };
   },
 
@@ -27,7 +33,8 @@ export default {
     }
   },
 
-  computed: {},
+  computed: {
+  }
 };
 </script>
 
