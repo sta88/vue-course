@@ -13,15 +13,7 @@
             </div>
 
             <div class="mb-3">
-                <label for="name" class="form-label">Name</label>
-                <input
-                    id="name"
-                    type="text"
-                    name="name"
-                    class="form-control"
-                    v-bind:value="userName"
-                    @input="$emit('update:userName', $event.target.value)"
-                />
+                <Formname v-model:userName="uName" />
             </div>
 
             <div class="mb-3">
@@ -78,19 +70,25 @@
 </template>
 
 <script>
+import Formname from "@/components/Formname";
+
 export default {
+    components: {
+      Formname,
+    },
+
     props: {
-	    userName: String
+        fullPhone: String,
 	},
 
     emits: [
-        'update:userName', 
+        'update:fullPhone', 
     ],
 
     data() {
         return {
             errors: [],
-            name: "",
+            uName: "",
             phone: "",
             code: "ru",
             codes: [
@@ -105,13 +103,14 @@ export default {
             phoneChecked: false,
             flag: true,
             pincode: "",
+            currCode: "+7"
         };
     },
 
     methods: {
         onSubmit(e) {
             this.errors = [];
-            if (!this.userName) {
+            if (!this.uName) {
                 this.errors.push("Enter your name.");
             }
             if (!this.phone) {
@@ -129,11 +128,13 @@ export default {
             if (this.errors.length == 0) {
                 e.preventDefault();
                 let answerJson = e.target.getAttribute("action");
+                let name = this.uName;
 
                 this.axios
                     .get(answerJson)
                     .then((response) => {
                         if (response.data.success) {
+                            this.$emit('named', name);
                             this.$emit('submitted', 'Cabinet');
                         } else {
                             this.errors.push("Error submit.");
@@ -144,7 +145,7 @@ export default {
                         console.log(error);
                     });
 
-                this.name = null;
+                this.uName = null;
                 this.phone = null;
                 this.pin = null;
             } else {
@@ -166,6 +167,14 @@ export default {
                             if (response.data.success) {
                                 this.phoneChecked = true;
                                 this.pincode = response.data.pincode;
+                                let _code = this.code;
+                                let currCode;
+                                this.codes.forEach(function(item) {
+                                    if (item.id === _code) {
+                                        currCode = item.value;
+                                    }
+                                });
+                                this.$emit('update:fullPhone', currCode + ' ' + this.phone);
                             } else {
                                 this.errors.push("Error submit.");
                             }

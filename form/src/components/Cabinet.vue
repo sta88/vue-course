@@ -1,7 +1,6 @@
 <template>
   <h2>Cabinet</h2>
   <br>
-    {{ uName }}
   <ul class="nav nav-tabs">
     <li class="nav-item"    
       v-for="tab in tabs"
@@ -16,7 +15,12 @@
     </li>
   </ul>
   <div class="tab-content">
-	  <component :is="currTab" class="tab"></component>
+	  <component 
+      :is="currTab" 
+      :userName='userName' 
+      :fullPhone='fullPhone' 
+      class="tab">
+    </component>
   </div>
 </template>
 
@@ -33,15 +37,15 @@
       Favorites
     },
 
-    props: [
-      'userName',
-    ],
+    props: {
+	    userName: String,
+	    fullPhone: String,
+	  },
 
     data() {
       return {
         currTab: 'Profile',
         tabs: ['Profile', 'Orders', 'Favorites'],
-        uName: this.userName,
       }
     },
 
@@ -53,5 +57,8 @@
 <style scoped>
   .tab-content {
     padding: 20px 0 0;
+  }
+  .nav-item {
+    margin-right: 10px;
   }
 </style>

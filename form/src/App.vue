@@ -1,8 +1,14 @@
 <template>
   <div class="container">
     <Header />
-
-    <component :is="currComp" v-on:submitted="afterForm" v-model:user-name="userName"></component>
+    
+    <component 
+      :is="currComp" 
+      v-on:submitted="afterForm" 
+      v-on:named="inputName" 
+      v-model:userName="userName"
+      v-model:fullPhone="fullPhone">
+    </component>
   </div>
 </template>
 
@@ -23,6 +29,7 @@ export default {
   data() {
     return {
       currComp: 'Register',
+      fullPhone: '',
       userName: '',
     };
   },
@@ -30,7 +37,11 @@ export default {
   methods: {
     afterForm(str) {
       this.currComp = str;
-    }
+    },
+
+    inputName(s) {
+      this.userName = s;
+    },
   },
 
   computed: {
