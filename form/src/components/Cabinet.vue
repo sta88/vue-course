@@ -38,7 +38,6 @@
     },
 
     props: {
-	    userName: String,
 	    fullPhone: String,
 	  },
 

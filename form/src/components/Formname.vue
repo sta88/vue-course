@@ -6,19 +6,19 @@
         name="name"
         class="form-control"
         autocomplete="off"
-        v-bind:value="userName"
-        @input="$emit('update:userName', $event.target.value)"
+        @input="setUsername"
     />
 </template>
 
 <script>
 export default({
-    props: {
-	    userName: String,
-	},
-
-    emits: [
-        'update:userName', 
-    ]
+    methods: {
+        setUsername() {
+            this.$store.commit('change', {
+                name: "username",
+                value: event.target.value
+            });
+        }
+    }
 })
 </script>

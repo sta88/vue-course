@@ -13,7 +13,7 @@
             </div>
 
             <div class="mb-3">
-                <Formname v-model:userName="uName" />
+                <Formname />
             </div>
 
             <div class="mb-3">
@@ -88,7 +88,6 @@ export default {
     data() {
         return {
             errors: [],
-            uName: "",
             phone: "",
             code: "ru",
             codes: [
@@ -128,14 +127,17 @@ export default {
             if (this.errors.length == 0) {
                 e.preventDefault();
                 let answerJson = e.target.getAttribute("action");
-                let name = this.uName;
 
                 this.axios
                     .get(answerJson)
                     .then((response) => {
                         if (response.data.success) {
-                            this.$emit('named', name);
-                            this.$emit('submitted', 'Cabinet');
+                            this.$store.commit('change', {
+                                name: "loggedIn",
+                                value: true
+                            });
+                            console.log(this.$store.state.loggedIn);              
+                            this.$router.push('/cabinet');
                         } else {
                             this.errors.push("Error submit.");
                         }
@@ -190,5 +192,11 @@ export default {
             }
         },
     },
+    
+    computed: {
+        uName() {            
+            return this.$store.state.username;
+        }
+    }
 };
 </script>
